@@ -1,1 +1,537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creative State — Strategic Creative Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0e1012;
+    --cream: #f5f2ed;
+    --teal: #1a4a3a;
+    --teal-mid: #2d6b54;
+    --teal-light: #3d8c6e;
+    --accent: #c8f04a;
+    --warm-white: #faf8f4;
+    --muted: #7a7670;
+    --border: rgba(14,16,18,0.1);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "DM Sans", sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
 
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 20px 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: background 0.4s, box-shadow 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(245,242,237,0.96);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 1px 0 var(--border);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .nav-logo img { width: 38px; height: 38px; object-fit: contain; }
+  .nav-brand {
+    font-family: "Sora", sans-serif; font-weight: 800;
+    font-size: 1rem; letter-spacing: -0.02em; color: var(--ink);
+  }
+  .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-size: 0.875rem; font-weight: 500; color: var(--ink);
+    text-decoration: none; opacity: 0.65; transition: opacity 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; }
+  .nav-cta {
+    background: var(--ink) !important; color: var(--cream) !important;
+    opacity: 1 !important; padding: 10px 22px !important;
+    border-radius: 100px; font-size: 0.8125rem !important;
+    font-weight: 700 !important; transition: background 0.2s, transform 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--teal) !important; transform: translateY(-1px); }
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .nav-hamburger span { display: block; width: 24px; height: 2px; background: var(--ink); border-radius: 2px; transition: all 0.3s; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; padding: 140px 5% 100px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center; position: relative; overflow: hidden;
+  }
+  .hero-blob {
+    position: absolute; border-radius: 50%;
+    background: var(--teal); filter: blur(80px); pointer-events: none;
+  }
+  .hero-blob-1 { width: 600px; height: 600px; top: -100px; right: -100px; opacity: 0.1; }
+  .hero-blob-2 { width: 300px; height: 300px; bottom: 50px; left: -80px; opacity: 0.06; }
+  .hero-content { position: relative; z-index: 1; animation: fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) both; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--teal); color: var(--accent);
+    font-family: "Sora", sans-serif; font-size: 0.6875rem;
+    font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 7px 16px; border-radius: 100px; margin-bottom: 32px;
+  }
+  .hero-badge::before {
+    content: ""; width: 6px; height: 6px;
+    background: var(--accent); border-radius: 50%; animation: pulse 2s infinite;
+  }
+  h1 {
+    font-family: "Sora", sans-serif; font-weight: 800;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1.05; letter-spacing: -0.035em; margin-bottom: 24px;
+  }
+  h1 em { font-style: normal; color: var(--teal-mid); }
+  .hero-sub {
+    font-size: clamp(1rem, 1.5vw, 1.125rem); line-height: 1.65;
+    color: var(--muted); max-width: 480px; margin-bottom: 40px;
+  }
+  .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .btn-primary {
+    background: var(--teal); color: var(--accent);
+    font-family: "Sora", sans-serif; font-weight: 700;
+    font-size: 0.9375rem; padding: 16px 30px; border-radius: 100px;
+    text-decoration: none; transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--ink); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(14,16,18,0.2); }
+  .btn-secondary {
+    background: transparent; color: var(--ink);
+    font-family: "Sora", sans-serif; font-weight: 600;
+    font-size: 0.9375rem; padding: 15px 26px; border-radius: 100px;
+    text-decoration: none; border: 2px solid var(--border);
+    transition: border-color 0.25s, background 0.25s, transform 0.25s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-secondary:hover { border-color: var(--teal); background: rgba(26,74,58,0.05); transform: translateY(-2px); }
+  .hero-visual {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+    animation: fadeIn 1.2s cubic-bezier(0.16,1,0.3,1) 0.2s both;
+  }
+  .hero-logo-frame { position: relative; width: 360px; height: 360px; }
+  .ring {
+    position: absolute; border-radius: 50%;
+    border: 1.5px solid rgba(26,74,58,0.14);
+  }
+  .ring-1 { inset: -28px; animation: spin 28s linear infinite; }
+  .ring-2 { inset: -56px; border-color: rgba(26,74,58,0.07); animation: spin 44s linear infinite reverse; }
+  .hero-logo-bg {
+    width: 360px; height: 360px; border-radius: 50%;
+    background: var(--teal); display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 30px 80px rgba(26,74,58,0.28);
+  }
+  .hero-logo-bg img { width: 64%; height: 64%; object-fit: contain; filter: brightness(0) invert(1); }
+  .stat-card {
+    position: absolute; background: var(--warm-white); border-radius: 16px;
+    padding: 14px 20px; box-shadow: 0 8px 30px rgba(14,16,18,0.1);
+    font-family: "Sora", sans-serif;
+  }
+  .stat-card strong { display: block; font-size: 1.5rem; font-weight: 800; color: var(--teal); line-height: 1; }
+  .stat-card span { font-size: 0.75rem; color: var(--muted); font-weight: 400; font-family: "DM Sans", sans-serif; }
+  .stat-1 { bottom: -18px; left: -36px; }
+  .stat-2 { top: 20px; right: -46px; }
+
+  /* SECTIONS */
+  section { padding: 100px 5%; }
+  .section-label {
+    font-family: "Sora", sans-serif; font-size: 0.6875rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal-mid);
+    margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::before { content: ""; width: 24px; height: 2px; background: var(--teal-mid); border-radius: 2px; }
+  h2 {
+    font-family: "Sora", sans-serif; font-weight: 800;
+    font-size: clamp(1.9rem, 3.8vw, 2.9rem);
+    line-height: 1.08; letter-spacing: -0.03em; margin-bottom: 20px;
+  }
+  h3 { font-family: "Sora", sans-serif; font-weight: 700; font-size: 1.125rem; letter-spacing: -0.02em; margin-bottom: 10px; }
+
+  /* QUÉ ES */
+  .what-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .what-left p { font-size: 1.0625rem; line-height: 1.7; color: var(--muted); margin-bottom: 32px; max-width: 460px; }
+  .dist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .dist-card { border-radius: 16px; padding: 22px; }
+  .dist-card.is { background: var(--teal); color: var(--warm-white); }
+  .dist-card.not { background: var(--warm-white); border: 1.5px solid var(--border); }
+  .dist-card .clabel { font-family: "Sora", sans-serif; font-size: 0.625rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 14px; opacity: 0.55; }
+  .dist-card ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .dist-card li { font-size: 0.875rem; font-weight: 500; display: flex; align-items: center; gap: 8px; line-height: 1.35; }
+  .dist-card.is li::before { content: "✓"; color: var(--accent); font-weight: 800; font-size: 0.75rem; flex-shrink: 0; }
+  .dist-card.not li { opacity: 0.45; text-decoration: line-through; }
+  .dist-card.not li::before { content: "✕"; text-decoration: none; font-size: 0.75rem; flex-shrink: 0; }
+  .what-visual { background: var(--teal); border-radius: 28px; padding: 48px 40px; color: var(--warm-white); position: sticky; top: 120px; }
+  .wv-logo { width: 72px; height: 72px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 28px; }
+  .wv-logo img { width: 48px; height: 48px; object-fit: contain; filter: brightness(0) invert(1); }
+  .what-visual blockquote { font-family: "Sora", sans-serif; font-size: 1.3rem; font-weight: 700; line-height: 1.35; letter-spacing: -0.02em; margin-bottom: 22px; }
+  .what-visual blockquote em { font-style: normal; color: var(--accent); }
+  .what-visual p { font-size: 0.9375rem; line-height: 1.65; opacity: 0.7; }
+
+  /* PARA QUIÉN */
+  .forwho { background: var(--ink); }
+  .forwho h2 { color: var(--warm-white); }
+  .forwho .section-label { color: var(--accent); }
+  .forwho .section-label::before { background: var(--accent); }
+  .forwho-intro { font-size: 1.0625rem; line-height: 1.7; color: rgba(255,255,255,0.5); max-width: 520px; margin-bottom: 56px; }
+  .pains-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .pain-card {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 20px; padding: 28px 24px;
+    transition: background 0.3s, border-color 0.3s, transform 0.3s; cursor: default;
+  }
+  .pain-card:hover { background: rgba(255,255,255,0.07); border-color: rgba(200,240,74,0.3); transform: translateY(-4px); }
+  .pain-icon { width: 38px; height: 38px; border-radius: 10px; background: rgba(200,240,74,0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+  .pain-icon svg { color: var(--accent); }
+  .pain-card h3 { font-size: 1rem; color: var(--warm-white); margin-bottom: 9px; }
+  .pain-card p { font-size: 0.875rem; line-height: 1.6; color: rgba(255,255,255,0.42); }
+
+  /* OFERTA */
+  .offer-header { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end; margin-bottom: 56px; }
+  .offer-header p { font-size: 1.0625rem; line-height: 1.65; color: var(--muted); }
+  .sprint-pill { display: inline-flex; align-items: center; gap: 8px; background: var(--teal); color: var(--accent); font-family: "Sora", sans-serif; font-size: 0.8125rem; font-weight: 700; padding: 8px 18px; border-radius: 100px; margin-bottom: 18px; }
+  .deliverables { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .deliv-card { background: var(--warm-white); border: 1.5px solid var(--border); border-radius: 20px; padding: 26px 22px; transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s; }
+  .deliv-card:hover { border-color: var(--teal-light); transform: translateY(-4px); box-shadow: 0 14px 36px rgba(26,74,58,0.1); }
+  .deliv-num { font-family: "Sora", sans-serif; font-size: 0.6875rem; font-weight: 700; color: var(--teal-mid); opacity: 0.45; margin-bottom: 12px; letter-spacing: 0.06em; }
+  .deliv-card h3 { font-size: 0.9375rem; margin-bottom: 0; }
+
+  /* OUTCOMES */
+  .outcomes { background: var(--teal); }
+  .outcomes h2 { color: var(--warm-white); }
+  .outcomes .section-label { color: var(--accent); }
+  .outcomes .section-label::before { background: var(--accent); }
+  .outcomes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .outcomes-list { list-style: none; display: flex; flex-direction: column; gap: 20px; }
+  .outcomes-list li { display: flex; align-items: flex-start; gap: 14px; font-size: 1.0625rem; font-weight: 500; color: rgba(255,255,255,0.82); line-height: 1.45; }
+  .oc { width: 26px; height: 26px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.7rem; color: var(--teal); font-weight: 800; margin-top: 2px; }
+  .outcomes-visual { display: flex; align-items: center; justify-content: center; padding: 40px 0; }
+  .orings { position: relative; width: 280px; height: 280px; }
+  .oring { position: absolute; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.1); }
+  .oring-1 { inset: 0; }
+  .oring-2 { inset: -28px; border-color: rgba(200,240,74,0.12); }
+  .oring-3 { inset: -56px; border-color: rgba(255,255,255,0.04); }
+  .oc-center { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .oc-bg { width: 110px; height: 110px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; }
+  .oc-bg img { width: 64px; height: 64px; object-fit: contain; filter: brightness(0) invert(1); }
+
+  /* FOUNDER */
+  .founder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .founder-card { background: var(--teal); border-radius: 28px; padding: 48px 42px; color: var(--warm-white); position: relative; overflow: hidden; }
+  .founder-card::after { content: ""; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: rgba(200,240,74,0.07); border-radius: 50%; pointer-events: none; }
+  .fc-logo { width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 28px; }
+  .fc-logo img { width: 30px; height: 30px; object-fit: contain; filter: brightness(0) invert(1); }
+  .founder-name { font-family: "Sora", sans-serif; font-size: 1.625rem; font-weight: 800; letter-spacing: -0.025em; margin-bottom: 6px; }
+  .founder-title { font-size: 0.875rem; color: var(--accent); font-weight: 500; margin-bottom: 28px; }
+  .founder-quote { font-size: 1.0625rem; line-height: 1.65; color: rgba(255,255,255,0.72); font-style: italic; }
+  .founder-content h2 { margin-bottom: 28px; }
+  .founder-block { margin-bottom: 22px; }
+  .founder-block p { font-size: 1rem; line-height: 1.75; color: var(--muted); }
+  .founder-tag { display: inline-block; background: rgba(26,74,58,0.08); color: var(--teal); font-family: "Sora", sans-serif; font-size: 0.8125rem; font-weight: 600; padding: 8px 16px; border-radius: 100px; margin-top: 22px; border: 1.5px solid rgba(26,74,58,0.14); }
+
+  /* CTA FINAL */
+  .cta-final { background: var(--ink); text-align: center; position: relative; overflow: hidden; }
+  .cta-blob { position: absolute; border-radius: 50%; background: var(--teal); filter: blur(100px); pointer-events: none; }
+  .cta-blob-1 { width: 500px; height: 500px; top: -200px; left: 50%; transform: translateX(-50%); opacity: 0.22; }
+  .cta-blob-2 { width: 300px; height: 300px; bottom: -100px; right: -80px; opacity: 0.12; }
+  .cta-inner { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+  .cta-logo-wrap { width: 76px; height: 76px; border-radius: 50%; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; margin: 0 auto 40px; }
+  .cta-logo-wrap img { width: 46px; height: 46px; object-fit: contain; filter: brightness(0) invert(1); }
+  .cta-final h2 { color: var(--warm-white); margin-bottom: 20px; }
+  .cta-sub { font-size: 1.0625rem; line-height: 1.7; color: rgba(255,255,255,0.5); max-width: 520px; margin: 0 auto 48px; }
+  .cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .btn-wa { background: #25D366; color: #fff; font-family: "Sora", sans-serif; font-weight: 700; font-size: 0.9375rem; padding: 16px 30px; border-radius: 100px; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; transition: background 0.25s, transform 0.25s, box-shadow 0.25s; }
+  .btn-wa:hover { background: #1aaf54; transform: translateY(-2px); box-shadow: 0 12px 36px rgba(37,211,102,0.3); }
+  .btn-cal { background: transparent; color: var(--warm-white); font-family: "Sora", sans-serif; font-weight: 600; font-size: 0.9375rem; padding: 15px 30px; border-radius: 100px; text-decoration: none; border: 2px solid rgba(255,255,255,0.18); display: inline-flex; align-items: center; gap: 10px; transition: border-color 0.25s, color 0.25s, transform 0.25s; }
+  .btn-cal:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  /* FOOTER */
+  footer { background: var(--ink); border-top: 1px solid rgba(255,255,255,0.06); padding: 36px 5%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .footer-right { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+  .footer-ig { display: inline-flex; align-items: center; gap: 7px; font-size: 0.8125rem; color: rgba(255,255,255,0.5); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+  .footer-ig:hover { color: var(--accent); }
+  .footer-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .footer-logo img { width: 28px; height: 28px; object-fit: contain; filter: brightness(0) invert(1); }
+  .footer-brand { font-family: "Sora", sans-serif; font-weight: 800; font-size: 0.875rem; color: rgba(255,255,255,0.75); letter-spacing: -0.02em; }
+  .footer-copy { font-size: 0.8125rem; color: rgba(255,255,255,0.28); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+  .fade-up { opacity: 0; transform: translateY(26px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    .hero { grid-template-columns: 1fr; padding-top: 110px; }
+    .hero-visual { order: -1; }
+    .hero-logo-frame, .hero-logo-bg { width: 260px; height: 260px; }
+    .stat-1 { bottom: -10px; left: 0; }
+    .stat-2 { top: 10px; right: 0; }
+    .what-grid { grid-template-columns: 1fr; }
+    .what-visual { position: static; }
+    .pains-grid { grid-template-columns: repeat(2,1fr); }
+    .offer-header { grid-template-columns: 1fr; gap: 20px; }
+    .deliverables { grid-template-columns: repeat(2,1fr); }
+    .outcomes-grid { grid-template-columns: 1fr; }
+    .founder-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+    .nav-links.open { display: flex; flex-direction: column; position: fixed; inset: 0; background: var(--cream); align-items: center; justify-content: center; gap: 40px; z-index: 200; }
+    .nav-links.open a { font-size: 1.25rem; opacity: 1; }
+    .pains-grid { grid-template-columns: 1fr; }
+    .dist-grid { grid-template-columns: 1fr; }
+    .deliverables { grid-template-columns: 1fr; }
+    .hero-logo-frame, .hero-logo-bg { width: 210px; height: 210px; }
+    section { padding: 70px 5%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <img src="logo.svg" alt="Creative State">
+    <span class="nav-brand">Creative State</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#que-es">Qué es</a></li>
+    <li><a href="#para-quien">Para quién</a></li>
+    <li><a href="#oferta">Strategy Sprint</a></li>
+    <li><a href="#founder">Founder</a></li>
+    <li><a href="#contacto" class="nav-cta">Hablemos →</a></li>
+  </ul>
+  <div class="nav-hamburger" id="ham" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Strategic Creative Studio</div>
+    <h1>Tu negocio no necesita hacer <em>más</em>.<br>Necesita pensar mejor.</h1>
+    <p class="hero-sub">Un estudio estratégico founder-led para fundadores y negocios ambiciosos que quieren claridad antes de ejecutar.</p>
+    <div class="hero-ctas">
+      <a href="https://calendly.com" class="btn-primary" target="_blank">Agendar conversación estratégica →</a>
+      <a href="#oferta" class="btn-secondary">Ver el Strategy Sprint</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-logo-frame">
+      <div class="ring ring-1"></div>
+      <div class="ring ring-2"></div>
+      <div class="hero-logo-bg">
+        <img src="logo.svg" alt="Creative State">
+      </div>
+    </div>
+    <div class="stat-card stat-1"><strong>100%</strong><span>Founder-led thinking</span></div>
+    <div class="stat-card stat-2"><strong>45 min</strong><span>Primera conversación</span></div>
+  </div>
+</section>
+
+<!-- QUÉ ES -->
+<section id="que-es">
+  <div class="what-grid">
+    <div class="what-left fade-up">
+      <div class="section-label">Qué es Creative State</div>
+      <h2>Pensamiento estratégico antes de ejecutar.</h2>
+      <p>Creative State es un estudio estratégico founder-led que ayuda a negocios a clarificar dirección, posicionamiento y ventaja competitiva. No es una agencia. No ejecutamos contenido. Pensamos primero.</p>
+      <div class="dist-grid">
+        <div class="dist-card is">
+          <div class="clabel">Somos</div>
+          <ul>
+            <li>Estudio estratégico founder-led</li>
+            <li>Expertos en Positioning</li>
+            <li>Customer Psychology</li>
+            <li>Growth y diferenciación</li>
+            <li>Brand y messaging</li>
+          </ul>
+        </div>
+        <div class="dist-card not">
+          <div class="clabel">No somos</div>
+          <ul>
+            <li>Agencia tradicional</li>
+            <li>Manejo de redes</li>
+            <li>Ejecución de contenido</li>
+            <li>Consultora corporativa</li>
+            <li>Decks interminables</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="fade-up">
+      <div class="what-visual">
+        <div class="wv-logo"><img src="logo.svg" alt=""></div>
+        <blockquote>"La mayoría de negocios no fracasan por falta de ejecución. Fracasan por falta de <em>claridad</em>."</blockquote>
+        <p>La estrategia no es un lujo para corporaciones grandes. Es lo que separa a los negocios que crecen intencionalmente de los que crecen por accidente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARA QUIÉN -->
+<section id="para-quien" class="forwho">
+  <div class="section-label">Para quién es</div>
+  <h2 style="color:var(--warm-white);max-width:600px;margin-bottom:18px;">Trabajamos con fundadores que ya tienen algo real — y quieren que funcione mejor.</h2>
+  <p class="forwho-intro">No con startups buscando validación. Con negocios que ya operan, venden y crecen — pero sienten que algo no está del todo bien.</p>
+  <div class="pains-grid">
+    <div class="pain-card fade-up">
+      <div class="pain-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+      <h3>Crecimiento sin control</h3><p>Las cosas funcionan, pero no sabés exactamente por qué. Cada mes es una sorpresa.</p>
+    </div>
+    <div class="pain-card fade-up">
+      <div class="pain-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <h3>Marketing reactivo, sin hilo</h3><p>Publicás porque toca. Respondés tendencias. La estrategia quedó en el olvido.</p>
+    </div>
+    <div class="pain-card fade-up">
+      <div class="pain-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+      <h3>Te perdés entre la competencia</h3><p>Tu cliente no puede explicar por qué elegirte. No tenés un lugar claro en su mente.</p>
+    </div>
+    <div class="pain-card fade-up">
+      <div class="pain-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <h3>El mensaje no conecta</h3><p>Explicás bien lo que hacés. Pero nadie siente que es para ellos. El copy no mueve.</p>
+    </div>
+    <div class="pain-card fade-up">
+      <div class="pain-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+      <h3>Ejecutás sin estructura</h3><p>Mucha acción, poco foco. Lanzás sin saber si es lo que el negocio realmente necesita.</p>
+    </div>
+    <div class="pain-card fade-up">
+      <div class="pain-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+      <h3>Necesitás ojos de afuera</h3><p>Estás tan adentro que ya no ves lo obvio. Un punto de vista externo puede cambiarlo todo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- OFERTA -->
+<section id="oferta">
+  <div class="offer-header">
+    <div class="fade-up">
+      <div class="sprint-pill">⚡ Strategy Sprint</div>
+      <h2>Una intervención estratégica intensiva.</h2>
+    </div>
+    <div class="fade-up">
+      <p>No una consultoría interminable. No un deck genérico. Una conversación profunda y estructurada que termina con dirección accionable — en días, no meses.</p>
+    </div>
+  </div>
+  <div class="deliverables">
+    <div class="deliv-card fade-up"><div class="deliv-num">01</div><h3>Strategic Audit</h3></div>
+    <div class="deliv-card fade-up"><div class="deliv-num">02</div><h3>Positioning Lens</h3></div>
+    <div class="deliv-card fade-up"><div class="deliv-num">03</div><h3>Customer Psychology Review</h3></div>
+    <div class="deliv-card fade-up"><div class="deliv-num">04</div><h3>Opportunity Mapping</h3></div>
+    <div class="deliv-card fade-up"><div class="deliv-num">05</div><h3>Campaign Concepts</h3></div>
+    <div class="deliv-card fade-up"><div class="deliv-num">06</div><h3>Messaging Clarity</h3></div>
+    <div class="deliv-card fade-up"><div class="deliv-num">07</div><h3>Growth Opportunities</h3></div>
+    <div class="deliv-card fade-up"><div class="deliv-num">08</div><h3>Action Roadmap</h3></div>
+  </div>
+</section>
+
+<!-- OUTCOMES -->
+<section class="outcomes">
+  <div class="outcomes-grid">
+    <div class="fade-up">
+      <div class="section-label">Con qué sales</div>
+      <h2>Claridad accionable.<br>No más decks olvidados.</h2>
+      <ul class="outcomes-list">
+        <li><div class="oc">✓</div><span>Positioning claro y diferenciado — sabes por qué alguien elegiría tu negocio.</span></li>
+        <li><div class="oc">✓</div><span>Messaging que conecta con la psicología de tu cliente ideal.</span></li>
+        <li><div class="oc">✓</div><span>Oportunidades de Growth que no estabas viendo desde adentro.</span></li>
+        <li><div class="oc">✓</div><span>Campaign concepts con dirección estratégica real.</span></li>
+        <li><div class="oc">✓</div><span>Roadmap accionable: qué hacer, en qué orden y por qué.</span></li>
+      </ul>
+    </div>
+    <div class="outcomes-visual fade-up">
+      <div class="orings">
+        <div class="oring oring-1"></div>
+        <div class="oring oring-2"></div>
+        <div class="oring oring-3"></div>
+        <div class="oc-center"><div class="oc-bg"><img src="logo.svg" alt="Creative State"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section id="founder">
+  <div class="founder-grid">
+    <div class="fade-up">
+      <div class="founder-card">
+        <div class="fc-logo"><img src="logo.svg" alt=""></div>
+        <div class="founder-name">Sthefan Borace</div>
+        <div class="founder-title">Creative State — Founder &amp; Lead Strategist</div>
+        <p class="founder-quote">"Pienso como fundador, no como consultor. Y eso cambia la conversación."</p>
+      </div>
+    </div>
+    <div class="founder-content fade-up">
+      <div class="section-label">El Founder</div>
+      <h2>Construí negocios.<br>Cometí los errores.<br>Sé qué mueve las agujas.</h2>
+      <div class="founder-block"><p>No soy consultor de carrera. Construí negocios desde cero, tomé decisiones estratégicas equivocadas y aprendí en carne propia lo que funciona y lo que se ve bien en papel pero no mueve nada.</p></div>
+      <div class="founder-block"><p>Me obsesiona una sola pregunta: ¿por qué alguien elegiría tu negocio sobre cualquier otra opción disponible? Si no tenés una respuesta clara, tu Brand, tu messaging y tu growth están construidos sobre arena.</p></div>
+      <span class="founder-tag">→ Founder-led. Siempre.</span>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section id="contacto" class="cta-final">
+  <div class="cta-blob cta-blob-1"></div>
+  <div class="cta-blob cta-blob-2"></div>
+  <div class="cta-inner fade-up">
+    <div class="cta-logo-wrap"><img src="logo.svg" alt="Creative State"></div>
+    <h2>Veamos si somos<br>el fit correcto.</h2>
+    <p class="cta-sub">Una conversación de 45 minutos. Sin formularios. Sin compromisos. Solo claridad — y la honestidad de decirte si podemos ayudarte de verdad.</p>
+    <div class="cta-btns">
+      <a href="https://wa.me/TUNUMERO" class="btn-wa" target="_blank">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Escribir por WhatsApp
+      </a>
+      <a href="https://calendly.com" class="btn-cal" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Reservar sesión
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">
+    <img src="logo.svg" alt="Creative State">
+    <span class="footer-brand">Creative State</span>
+  </a>
+  <div class="footer-right">
+    <a href="https://instagram.com/creativestatepty" class="footer-ig" target="_blank">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      @creativestatepty
+    </a>
+    <span class="footer-copy">© 2026 Creative State. Strategic Creative Studio.</span>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById("nav");
+  window.addEventListener("scroll", () => nav.classList.toggle("scrolled", window.scrollY > 40));
+  function toggleMenu() { document.getElementById("navLinks").classList.toggle("open"); }
+  document.querySelectorAll("#navLinks a").forEach(a => a.addEventListener("click", () => document.getElementById("navLinks").classList.remove("open")));
+  const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting){ setTimeout(()=>e.target.classList.add("visible"),60); obs.unobserve(e.target); } }), {threshold:0.1});
+  document.querySelectorAll(".fade-up").forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
